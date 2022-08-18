@@ -1,7 +1,7 @@
 #include "easySwitch.h"
 
 /// <summary>
-/// easySwitch cosntructor
+/// easySwitch constructor
 /// </summary>
 /// <param name="pSwitchPin">The switches arduino pin </param>
 easySwitch::easySwitch(int pSwitchPin)
