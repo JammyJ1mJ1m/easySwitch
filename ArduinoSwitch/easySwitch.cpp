@@ -8,6 +8,7 @@ easySwitch::easySwitch(int pSwitchPin)
 {
 	switchPin = pSwitchPin;
 	switchState = false;
+	lastSwitchState = false;
 }
 
 /// <summary>
@@ -60,3 +61,22 @@ int easySwitch::getSwitchPin()
 {
 	return switchPin;
 }
+
+/// <summary>
+/// Returns the swtiches alst state
+/// </summary>
+/// <returns></returns>
+bool easySwitch::getLastSwitchState()
+{
+	return lastSwitchState;
+}
+
+/// <summary>
+/// Sets the switches last state
+/// </summary>
+/// <param name="pState"></param>
+void easySwitch::setLastState(bool pState)
+{
+	lastSwitchState = pState;
+}
+

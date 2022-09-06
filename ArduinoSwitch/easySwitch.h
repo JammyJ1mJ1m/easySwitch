@@ -9,9 +9,12 @@ public:
 	void toggleSwitch();
 	bool getSwitchState();
 	int getSwitchPin();
+	bool getLastSwitchState();
+	void setLastState(bool pState);
 
 private:
 	int switchPin;
 	bool switchState;
+	bool lastSwitchState;
 };
 
