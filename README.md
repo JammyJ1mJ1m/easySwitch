@@ -15,4 +15,6 @@ void setSwitchPin(int pSwitchPin);
 void toggleSwitch();
 bool getSwitchState();
 int getSwitchPin();
+bool getLastSwitchState();
+void setLastState(bool pState);
 ```
