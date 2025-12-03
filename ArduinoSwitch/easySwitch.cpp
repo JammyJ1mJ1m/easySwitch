@@ -1,82 +1,42 @@
 #include "easySwitch.h"
 
-/// <summary>
-/// easySwitch constructor
-/// </summary>
-/// <param name="pSwitchPin">The switches arduino pin </param>
-easySwitch::easySwitch(int pSwitchPin)
-{
-	switchPin = pSwitchPin;
-	switchState = false;
-	lastSwitchState = false;
+easySwitch::easySwitch(int pSwitchPin, bool activeHigh, unsigned long debounceTime) {
+    switchPin = pSwitchPin;
+    pinMode(switchPin, INPUT_PULLUP);  // assuming a pullup button, adjust if needed
+    this->activeHigh = activeHigh;
+    this->debounceTime = debounceTime;
+    switchState = !activeHigh; // default state
+    lastSwitchState = switchState;
+    lastChangeTime = 0;
 }
 
-/// <summary>
-/// Sets the switch state to true
-/// </summary>
-void easySwitch::setSwitchOn()
-{
-	switchState = true;
+void easySwitch::update() {
+    bool reading = digitalRead(switchPin);
+    if (!activeHigh) reading = !reading; // invert logic if active LOW
+
+    // Check for state change with debounce
+    if (reading != lastSwitchState) {
+        unsigned long currentMillis = millis();
+        if (currentMillis - lastChangeTime >= debounceTime) {
+            lastSwitchState = reading;
+            switchState = reading;
+            lastChangeTime = currentMillis;
+        }
+    }
 }
 
-/// <summary>
-/// Sets the switch state to false
-/// </summary>
-void easySwitch::setSwitchOff()
-{
-	switchState = false;
+bool easySwitch::isPressed() {
+    return (switchState == true); //&& (lastSwitchState == false);
 }
 
-/// <summary>
-/// Sets the switch pin to a given value
-/// </summary>
-/// <param name="pSwitchPin">Passed bool switch state value</param>
-void easySwitch::setSwitchPin(int pSwitchPin)
-{
-	switchPin = pSwitchPin;
+bool easySwitch::isReleased() {
+    return (switchState == false);// && (lastSwitchState == true);
 }
 
-/// <summary>
-/// Flips the current switch state
-/// </summary>
-void easySwitch::toggleSwitch()
-{
-	switchState = !switchState;
+bool easySwitch::getState() {
+    return switchState;
 }
 
-/// <summary>
-/// Gets the switch state
-/// </summary>
-/// <returns>the switch bool state</returns>
-bool easySwitch::getSwitchState()
-{
-	return switchState;
+int easySwitch::getPin() {
+    return switchPin;
 }
-
-/// <summary>
-/// Gets the swtich arduino pin
-/// </summary>
-/// <returns>The int switch pin</returns>
-int easySwitch::getSwitchPin()
-{
-	return switchPin;
-}
-
-/// <summary>
-/// Returns the swtiches alst state
-/// </summary>
-/// <returns></returns>
-bool easySwitch::getLastSwitchState()
-{
-	return lastSwitchState;
-}
-
-/// <summary>
-/// Sets the switches last state
-/// </summary>
-/// <param name="pState"></param>
-void easySwitch::setLastState(bool pState)
-{
-	lastSwitchState = pState;
-}
-
